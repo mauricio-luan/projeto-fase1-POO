@@ -1,31 +1,38 @@
 import { validate } from "bycontract";
+import { TIPOS } from "../../constants";
 
-export class Cliente {
+class Cliente {
   #nome;
   #documento;
   #tipo;
   #veiculos;
 
-  constructor(nome, documento, tipo, veiculos) {
-    validate(arguments, [String, String, String, "Array.<String>"]);
+  constructor({ nome, documento, tipo, veiculos }) {
+    validate(arguments[0], {
+      nome: "String",
+      documento: "String",
+      tipo: "String",
+      veiculos: "Array.<String>",
+    });
+
     this.#nome = nome;
     this.#documento = documento;
     this.#tipo = tipo;
 
     switch (this.#tipo) {
-      case "Professor":
+      case TIPOS.PROFESSOR:
         if (veiculos.length > 2)
           throw new Error("Professores podem cadastrar no máximo 2 veículos.");
         this.#veiculos = [...veiculos];
         break;
 
-      case "Estudante":
+      case TIPOS.ESTUDANTE:
         if (veiculos.length > 1)
           throw new Error("Estudantes podem cadastrar no máximo 1 veículo.");
         this.#veiculos = veiculos;
         break;
 
-      case "Empresa":
+      case TIPOS.EMPRESA:
         this.#veiculos = [...veiculos];
         break;
 

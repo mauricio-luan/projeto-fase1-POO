@@ -1,28 +1,22 @@
-import { Cliente } from "./Cliente";
 import { validate } from "bycontract";
+import { Cliente } from "./Cliente";
 
 export class Estudante extends Cliente {
-  #tipo;
   #saldo;
 
-  constructor(nome, documento, tipoCliente, saldo) {
-    super(nome, documento, tipoCliente);
+  constructor({ nome, documento, veiculos, saldo }) {
+    super({ nome, documento, tipo: "Estudante", veiculos });
 
-    validate(saldo, Number);
+    validate(saldo, "Number");
     this.#saldo = saldo;
-    this.#tipo = "Estudante";
-  }
-
-  get tipo() {
-    return this.#tipo;
   }
 
   get saldo() {
     return this.#saldo;
   }
 
-  set saldo(value) {
-    validate(value, Number);
-    this.#saldo = value;
+  set saldo(valor) {
+    validate(valor, "Number");
+    this.#saldo += valor;
   }
 }
