@@ -1,7 +1,17 @@
-import { Cliente } from "./Cliente";
+import Cliente from "./Cliente.js";
 
-export class Professor extends Cliente {
-  constructor(nome, documento) {
-    super(nome, documento);
+export default class Professor extends Cliente {
+  constructor({ nome, documento, veiculos }) {
+    if (veiculos.length > 2)
+      throw new Error("Professores não podem possuir mais de dois veículos.");
+
+    super({ nome, documento, tipo: "Professor", veiculos });
+  }
+
+  cadastrarVeiculo(placa) {
+    if (this.veiculos.length >= 2)
+      throw new Error("Professores não podem possuir mais de dois veículos.");
+
+    super.cadastrarVeiculo(placa);
   }
 }

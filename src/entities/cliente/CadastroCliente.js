@@ -1,7 +1,7 @@
 import { validate } from "bycontract";
-import Cliente from "./Cliente";
+import Cliente from "./Cliente.js";
 
-export class CadastroCliente {
+export default class CadastroCliente {
   #clientes;
 
   constructor() {
@@ -15,11 +15,11 @@ export class CadastroCliente {
   }
 
   excluirCliente(documentoCliente) {
-    validate(cliente, Cliente);
+    validate(documentoCliente, Cliente);
     const index = this.#clientes.findIndex(
       (c) => c.documento === documentoCliente,
     );
-    if (index !== 1) throw new Error("Cliente não encontrado");
+    if (index === -1) throw new Error("Cliente não encontrado");
 
     this.#clientes.splice(index, 1);
     return true;

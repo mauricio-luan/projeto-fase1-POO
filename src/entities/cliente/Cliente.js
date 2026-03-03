@@ -1,7 +1,7 @@
 import { validate } from "bycontract";
-import { TIPOS } from "../../constants";
+import { TIPOS } from "../../constants.js";
 
-class Cliente {
+export default class Cliente {
   #nome;
   #documento;
   #tipo;
@@ -16,28 +16,13 @@ class Cliente {
     });
 
     this.#nome = nome;
-    this.#documento = documento;
     this.#tipo = tipo;
+    this.#veiculos = [...veiculos];
 
-    switch (this.#tipo) {
-      case TIPOS.PROFESSOR:
-        if (veiculos.length > 2)
-          throw new Error("Professores podem cadastrar no máximo 2 veículos.");
-        this.#veiculos = [...veiculos];
-        break;
-
-      case TIPOS.ESTUDANTE:
-        if (veiculos.length > 1)
-          throw new Error("Estudantes podem cadastrar no máximo 1 veículo.");
-        this.#veiculos = veiculos;
-        break;
-
-      case TIPOS.EMPRESA:
-        this.#veiculos = [...veiculos];
-        break;
-
-      default:
-        throw new Error("Tipo de cliente inválido.");
+    if (!this.validaDocumento(documento)) {
+      throw new Error("Documento inválido.");
+    } else {
+      this.#documento = documento;
     }
   }
 
@@ -55,5 +40,23 @@ class Cliente {
 
   get veiculos() {
     return this.#veiculos;
+  }
+
+  toString() {
+    return `Cliente { nome: '${this.#nome}', documento: '${this.#documento}', tipo: '${this.#tipo}', veiculos: ${JSON.stringify(this.#veiculos)} }`;
+  }
+
+  validaDocumento(doc) {
+    const formattedDoc = doc.replace(/[^0-9]/g, "");
+    return formattedDoc.length === 11 || formattedDoc.length === 14;
+  }
+
+  cadastrarVeiculo(placa) {
+    validate(placa, "String"); 
+    if (this.#veiculos.includes(placa)) {
+      throw new Error("Veículo já cadastrado para este cliente.");
+    }
+    
+    this.#veiculos.push(placa);
   }
 }
