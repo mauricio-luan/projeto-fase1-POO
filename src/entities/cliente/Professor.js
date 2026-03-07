@@ -1,12 +1,13 @@
-import { validate} from "bycontract";
+import { validate } from "bycontract";
 import Cliente from "./Cliente.js";
+import { TIPOS } from "../../constants.js";
 
 export default class Professor extends Cliente {
   constructor({ nome, documento, veiculos }) {
     if (veiculos.length > 2)
       throw new Error("Professores não podem possuir mais de dois veículos.");
 
-    super({ nome, documento, tipo: "Professor", veiculos });
+    super({ nome, documento, tipo: TIPOS.PROFESSOR, veiculos });
   }
 
   cadastrarVeiculo(placa) {

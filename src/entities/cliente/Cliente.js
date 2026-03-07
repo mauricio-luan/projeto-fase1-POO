@@ -51,7 +51,7 @@ export default class Cliente {
   }
 
   cadastrarVeiculo(placa) {
-    validate(placa, "String"); 
+    validate(placa, "String");
     if (this.#veiculos.has(placa)) {
       throw new Error("Veículo já cadastrado para este cliente.");
     }
@@ -68,7 +68,5 @@ export default class Cliente {
     return true;
   }
 
-  calcularTarifa(ticket) {
-    validate(ticket, "TicketEstacionamento");
-  }
+  calcularTarifa(ticket) {}
 }

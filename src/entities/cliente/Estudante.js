@@ -1,5 +1,6 @@
 import { validate } from "bycontract";
 import Cliente from "./Cliente.js";
+import { TARIFAS, TIPOS } from "../../constants.js";
 
 export default class Estudante extends Cliente {
   #saldo;
@@ -9,9 +10,9 @@ export default class Estudante extends Cliente {
 
     if (veiculos.length > 1)
       throw new Error("Estudantes não podem possuir mais de um veículo.");
-    
-    super({ nome, documento, tipo: "Estudante", veiculos });
-    
+
+    super({ nome, documento, tipo: TIPOS.ESTUDANTE, veiculos });
+
     this.#saldo = saldo;
   }
 
@@ -28,7 +29,7 @@ export default class Estudante extends Cliente {
 
   descontarSaldo(valor) {
     validate(valor, "Number");
-    return this.#saldo -= valor;
+    return (this.#saldo -= valor);
   }
 
   creditosNegativos(valor) {
@@ -48,8 +49,6 @@ export default class Estudante extends Cliente {
   }
 
   calcularTarifa(ticket) {
-    const tarifaDiaria = 3;
-    return tarifaDiaria * ticket.qtdDiasUso;
+    return TARIFAS.DIARIA * ticket.qtdDiasUso;
   }
-
 }

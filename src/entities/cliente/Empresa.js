@@ -1,12 +1,13 @@
 import { validate } from "bycontract";
 import Cliente from "./Cliente.js";
+import { TARIFAS, TIPOS } from "../../constants.js";
 
 export default class Empresa extends Cliente {
   #debitos;
   #adimplente;
 
   constructor({ nome, documento, veiculos, debitos = 0 }) {
-    super({ nome, documento, tipo: "Empresa", veiculos });
+    super({ nome, documento, tipo: TIPOS.EMPRESA, veiculos });
 
     validate(debitos, "Number");
     this.#debitos = debitos;
@@ -54,11 +55,11 @@ export default class Empresa extends Cliente {
   }
 
   calcularTarifa(ticket) {
-    const tarifaDiaria = 10;
-    const multa = 3;
     if (ticket.qtdDiasUso > 1) {
-      return (tarifaDiaria * ticket.qtdDiasUso) + (multa * ticket.qtdDiasUso);
+      return (
+        TARIFAS.DIARIA * ticket.qtdDiasUso + TARIFAS.MULTA * ticket.qtdDiasUso
+      );
     }
-    return tarifaDiaria * ticket.qtdDiasUso;
+    return TARIFAS.DIARIA * ticket.qtdDiasUso;
   }
 }
