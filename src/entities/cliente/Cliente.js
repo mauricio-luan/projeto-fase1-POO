@@ -1,5 +1,9 @@
 import { validate } from "bycontract";
 
+/**
+ * Classe base que representa um cliente do estacionamento.
+ * Armazena dados pessoais, documento e veículos registrados.
+ */
 export default class Cliente {
   #nome;
   #documento;
@@ -45,6 +49,11 @@ export default class Cliente {
     return `Cliente { nome: '${this.#nome}', documento: '${this.#documento}', tipo: '${this.#tipo}', veiculos: ${JSON.stringify(this.veiculos)} }`;
   }
 
+  /**
+   * Valida o documento do cliente.
+   * @param {string} doc - O documento a ser validado.
+   * @returns {boolean} - Retorna true se o documento for válido, caso contrário, false.
+   */
   validaDocumento(doc) {
     const formattedDoc = doc.replace(/[^0-9]/g, "");
     return formattedDoc.length === 11 || formattedDoc.length === 14;
@@ -68,5 +77,10 @@ export default class Cliente {
     return true;
   }
 
+  /**
+   * Calcula a tarifa do estacionamento com base no ticket fornecido.
+   * @param {object} ticket - O ticket de estacionamento.
+   * @returns {number} - A tarifa calculada.
+   */
   calcularTarifa(ticket) {}
 }

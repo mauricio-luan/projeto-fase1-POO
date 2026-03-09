@@ -1,5 +1,9 @@
 import { validate } from "bycontract";
 
+/**
+ * Classe que representa um ticket de estacionamento.
+ * Registra entrada, saída e tempo de permanência de um veículo.
+ */
 export default class TicketEstacionamento {
   #placa;
   #tipoCliente;
@@ -11,7 +15,6 @@ export default class TicketEstacionamento {
     validate(arguments[0], {
       placa: "String",
       tipoCliente: "String",
-      dataHoraEntrada: "Date",
     });
 
     this.#placa = placa;
@@ -30,17 +33,20 @@ export default class TicketEstacionamento {
   }
 
   get dataHoraEntrada() {
-    return this.#dataHoraEntrada;
+    return new Date(this.#dataHoraEntrada);
   }
 
   get dataHoraSaida() {
-    return this.#dataHoraSaida;
+    return this.#dataHoraSaida ? new Date(this.#dataHoraSaida) : null;
   }
 
   get qtdDiasUso() {
     return this.#qtdDiasUso;
   }
 
+  /**
+   * Calcula a quantidade de dias de uso do estacionamento com base nas datas de entrada e saída.
+   */
   #calcularDiasUso() {
     const diaEntrada = new Date(this.#dataHoraEntrada).setHours(0, 0, 0, 0);
     const diaSaida = new Date(this.#dataHoraSaida).setHours(0, 0, 0, 0);
@@ -66,11 +72,11 @@ export default class TicketEstacionamento {
   toString() {
     return (
       `TicketEstacionamento { ` +
-      `placa: '${this.#placa}', ` +
-      `tipoCliente: '${this.#tipoCliente}', ` +
-      `dataHoraEntrada: ${this.#dataHoraEntrada.toISOString()}, ` +
-      `dataHoraSaida: ${this.#dataHoraSaida ? this.#dataHoraSaida.toISOString() : null}, ` +
-      `qtdDiasUso: ${this.#qtdDiasUso} }`
+      `placa: '${this.placa}', ` +
+      `tipoCliente: '${this.tipoCliente}', ` +
+      `dataHoraEntrada: ${this.dataHoraEntrada.toISOString()}, ` +
+      `dataHoraSaida: ${this.dataHoraSaida ? this.dataHoraSaida.toISOString() : null}, ` +
+      `qtdDiasUso: ${this.qtdDiasUso} }`
     );
   }
 }

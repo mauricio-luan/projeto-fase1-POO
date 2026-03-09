@@ -1,6 +1,10 @@
 import { validate } from "bycontract";
-import { TARIFAS } from "../../constants";
+import { TARIFAS } from "../../constants.js";
 
+/**
+ * Classe que representa um cliente avulso.
+ * Calcula tarifa conforme horas ou dias de permanência.
+ */
 export default class Avulso {
   #veiculos;
 

@@ -2,6 +2,10 @@ import { validate } from "bycontract";
 import Cliente from "./Cliente.js";
 import { TARIFAS, TIPOS } from "../../constants.js";
 
+/**
+ * Classe que representa um cliente do tipo empresa.
+ * Gerencia débitos e adimplência da empresa.
+ */
 export default class Empresa extends Cliente {
   #debitos;
   #adimplente;

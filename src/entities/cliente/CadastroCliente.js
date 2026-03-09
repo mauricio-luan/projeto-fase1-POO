@@ -1,6 +1,10 @@
 import { validate } from "bycontract";
 import Cliente from "./Cliente.js";
 
+/**
+ * Classe que gerencia o registro e armazenamento de clientes.
+ * Fornece operações de CRUD para clientes identificados por documento.
+ */
 export default class CadastroCliente {
   #clientes;
 
@@ -16,7 +20,8 @@ export default class CadastroCliente {
 
   excluirCliente(documentoCliente) {
     validate(documentoCliente, "String");
-    if (!this.#clientes.has(documentoCliente)) throw new Error("Cliente não encontrado");
+    if (!this.#clientes.has(documentoCliente))
+      throw new Error("Cliente não encontrado");
 
     this.#clientes.delete(documentoCliente);
     return true;
@@ -26,6 +31,11 @@ export default class CadastroCliente {
     return this.#clientes.get(documentoCliente);
   }
 
+  /**
+   * Obtém um cliente com base na placa do veículo.
+   * @param {string} placa - A placa do veículo.
+   * @returns {Object|null} - O cliente associado à placa, se existir.
+   */
   obterClientePorPlaca(placa) {
     validate(placa, "String");
     for (const cliente of this.clientes) {

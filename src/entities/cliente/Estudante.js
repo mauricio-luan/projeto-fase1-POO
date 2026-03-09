@@ -2,6 +2,10 @@ import { validate } from "bycontract";
 import Cliente from "./Cliente.js";
 import { TARIFAS, TIPOS } from "../../constants.js";
 
+/**
+ * Classe que representa um cliente do tipo estudante.
+ * Gerencia saldo de créditos e permite apenas um veículo.
+ */
 export default class Estudante extends Cliente {
   #saldo;
 

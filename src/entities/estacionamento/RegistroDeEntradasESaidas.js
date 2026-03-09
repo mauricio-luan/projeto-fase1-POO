@@ -1,19 +1,32 @@
 import { validate } from "bycontract";
-import TicketEstacionamento from "./TicketEstacionamento";
-import Avulso from "../cliente/Avulso";
-import { TIPOS } from "../../constants";
+import { TIPOS } from "../../constants.js";
+import TicketEstacionamento from "./TicketEstacionamento.js";
+import Avulso from "../cliente/Avulso.js";
+import CadastroCliente from "../cliente/CadastroCliente.js";
 
-export default class Estacionamento {
-  #patio;
+/**
+ * Classe que gerencia entradas e saídas de veículos no estacionamento.
+ * Valida acesso, emite tickets e controla lista negra de veículos.
+ */
+export default class RegistroDeEntradasESaidas {
   #clientes;
+  #patio;
   #listaNegra;
+  #historicoTickets;
 
-  constructor(cadastroClientes) {
+  constructor(csvCadastroClientes) {
+    this.#clientes = csvCadastroClientes || new CadastroCliente(); //csv com os clientes
     this.#patio = new Map();
-    this.#clientes = cadastroClientes; //csv com os clientes
     this.#listaNegra = new Set();
+    this.#historicoTickets = [];
   }
 
+  /**
+   * Valida a entrada de um veículo no estacionamento.
+   * @param {string} placa - A placa do veículo.
+   * @returns {object|null} - O cliente associado à placa, se existir.
+   * @throws {Error} - Se a entrada for inválida.
+   */
   #validaEntrada(placa) {
     validate(placa, "String");
 
@@ -44,10 +57,14 @@ export default class Estacionamento {
           break;
       }
     }
-
     return cliente;
   }
 
+  /**
+   * Registra a entrada de um veículo no estacionamento e adiciona ao registro de entradas e saídas.
+   * @param {string} placa - A placa do veículo.
+   * @returns {object} - O ticket de estacionamento gerado.
+   */
   registraEntrada(placa) {
     validate(placa, "String");
     const cliente = this.#validaEntrada(placa);
@@ -59,13 +76,21 @@ export default class Estacionamento {
     });
 
     this.#patio.set(placa, ticket);
+    this.#historicoTickets.push(ticket);
     return ticket;
   }
 
+  /**
+   * Registra a saída de um veículo do estacionamento.
+   * @param {string} placa - A placa do veículo.
+   * @param {boolean} pgtoAprovado - Indica se o pagamento foi aprovado.
+   * @returns {object} - O ticket de estacionamento atualizado.
+   */
   registraSaida(placa, pgtoAprovado) {
     validate(placa, "String");
 
     const ticket = this.#patio.get(placa);
+
     if (!ticket)
       throw new Error(`Veículo ${placa} não encontrado no estacionamento`);
 
@@ -98,5 +123,17 @@ export default class Estacionamento {
 
     this.#patio.delete(placa);
     return ticket;
+  }
+
+  get patio() {
+    return new Map(this.#patio);
+  }
+
+  get listaNegra() {
+    return new Set(this.#listaNegra);
+  }
+
+  get historicoTickets() {
+    return [...this.#historicoTickets];
   }
 }
