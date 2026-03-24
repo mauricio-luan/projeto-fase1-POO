@@ -9,11 +9,13 @@ import { TIPOS } from "./src/constants.js";
 
 async function main() {
   const cadastroCliente = new CadastroCliente();
-  const csv = new CSV(cadastroCliente);
-  const clientesDoCsv = await csv.getClientesDoCSV();
   const estacionamento = new RegistroDeEntradasESaidas(cadastroCliente);
+  const csv = new CSV(cadastroCliente, estacionamento);
+  const clientesDoCsv = await csv.getCSVClientes();
+  const historicoTicketsDoCsv = await csv.getCSVHistoricoTickets();
 
   await setClientes(cadastroCliente, clientesDoCsv);
+  await setTickets(estacionamento, historicoTicketsDoCsv);
   await menu(cadastroCliente, estacionamento, csv);
 }
 
@@ -52,6 +54,24 @@ async function setClientes(cadastroCliente, listaClientesCSV) {
 
     cadastroCliente.cadastrarCliente(novoCliente);
   });
+}
+
+async function setTickets(estacionamento, historicoTicketsDoCsv) {
+  const ticketsEmAberto = historicoTicketsDoCsv
+    .filter((linha) => linha.split(",")[3] === "")
+    .map((linha) => {
+      const [placa, tipoCliente, dataHoraEntrada] = linha.trim().split(",");
+
+      return {
+        placa,
+        tipoCliente,
+        dataHoraEntrada: new Date(dataHoraEntrada),
+      };
+    });
+
+  ticketsEmAberto.forEach((ticket) =>
+    estacionamento.registraEntrada(ticket.placa),
+  );
 }
 
 const rl = readline.createInterface({

@@ -22,7 +22,6 @@ export default class Professor extends Cliente {
   }
 
   calcularTarifa(ticket) {
-    validate(ticket, "TicketEstacionamento");
     return 0;
   }
 }

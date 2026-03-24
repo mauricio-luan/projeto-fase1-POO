@@ -10,6 +10,7 @@ export default class TicketEstacionamento {
   #dataHoraEntrada;
   #dataHoraSaida;
   #qtdDiasUso;
+  #valorCobrado;
 
   constructor({ placa, tipoCliente, dataHoraEntrada = new Date() }) {
     validate(arguments[0], {
@@ -20,8 +21,9 @@ export default class TicketEstacionamento {
     this.#placa = placa;
     this.#tipoCliente = tipoCliente;
     this.#dataHoraEntrada = dataHoraEntrada;
-    this.#qtdDiasUso = 0;
+    this.#qtdDiasUso = null;
     this.#dataHoraSaida = null;
+    this.#valorCobrado = 0;
   }
 
   get placa() {
@@ -76,7 +78,18 @@ export default class TicketEstacionamento {
       `tipoCliente: '${this.tipoCliente}', ` +
       `dataHoraEntrada: ${this.dataHoraEntrada.toISOString()}, ` +
       `dataHoraSaida: ${this.dataHoraSaida ? this.dataHoraSaida.toISOString() : null}, ` +
-      `qtdDiasUso: ${this.qtdDiasUso} }`
+      `qtdDiasUso: ${this.qtdDiasUso}, ` +
+      `valorCobrado: R$ ${(this.valorCobrado ? this.valorCobrado : 0).toFixed(2)} }`
     );
+  }
+
+  get valorCobrado() {
+    return this.#valorCobrado;
+  }
+
+  set valorCobrado(valor) {
+    validate(valor, "Number");
+    if (valor < 0) throw new Error("Valor cobrado não pode ser negativo.");
+    this.#valorCobrado = valor;
   }
 }

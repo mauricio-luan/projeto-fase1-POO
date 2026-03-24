@@ -105,10 +105,12 @@ export default class RegistroDeEntradasESaidas {
       switch (cliente.tipo) {
         case TIPOS.ESTUDANTE:
           cliente.descontarSaldo(valorDevido);
+          ticket.valorCobrado = valorDevido;
           break;
 
         case TIPOS.EMPRESA:
           cliente.imputarDebito(valorDevido);
+          ticket.valorCobrado = valorDevido;
           break;
 
         case TIPOS.PROFESSOR:
@@ -117,6 +119,7 @@ export default class RegistroDeEntradasESaidas {
     } else {
       const clienteAvulso = new Avulso({ veiculos: [placa] });
       const valorDevido = clienteAvulso.calcularTarifa(ticket);
+      ticket.valorCobrado = valorDevido;
 
       if (!pgtoAprovado) this.#listaNegra.add(placa);
     }
@@ -133,7 +136,14 @@ export default class RegistroDeEntradasESaidas {
     return new Set(this.#listaNegra);
   }
 
-  get historicoTickets() {
-    return [...this.#historicoTickets];
+  get historicoTicketsToJSON() {
+    return this.#historicoTickets.map((ticket) => ({
+      placa: ticket.placa,
+      tipoCliente: ticket.tipoCliente,
+      dataHoraEntrada: ticket.dataHoraEntrada,
+      ...(ticket.dataHoraSaida ? { dataHoraSaida: ticket.dataHoraSaida } : {}),
+      ...(ticket.qtdDiasUso ? { qtdDiasUso: ticket.qtdDiasUso } : {}),
+      ...(ticket.valorCobrado ? { valorCobrado: ticket.valorCobrado } : {}),
+    }));
   }
 }

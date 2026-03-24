@@ -1,11 +1,11 @@
-01861192088,Estudante,mauricio,"abc123",50
+01861192088,Estudante,mauricio,"abc123",40
 01861192079,Professor,Bugiganga,"abc134;786bjas"
 79595586000134,Empresa,payer,"top123;bct456;ppk789",12,false
 01861192077,Estudante,João,"joao123",1
 01861192076,Professor,Maria,"maria456;abc789"
-79595586000135,Empresa,TechCorp,"tech123;corp456",5,false
+79595586000135,Empresa,TechCorp,"tech123;corp456",0,true
 01861192075,Estudante,Ana,"ana789",10
 01861192074,Professor,Carlos,"carlos321"
 01861192046,Estudante,lkas,"abc999",78
 68292778000155,Empresa,blau,"vag123;bun789;da01234",1500,false
-01861192032,Estudante,mais um,"gui123",65
+01861192032,Estudante,mais um,"gui123",60

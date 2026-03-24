@@ -42,7 +42,7 @@ export default class Estudante extends Cliente {
   }
 
   toString() {
-    return `${super.toString().slice(0, -2)}, saldo: ${this.saldo} }`;
+    return `${super.toString().slice(0, -2)}, saldo: R$ ${this.saldo.toFixed(2)} }`;
   }
 
   cadastrarVeiculo(placa) {
@@ -53,6 +53,8 @@ export default class Estudante extends Cliente {
   }
 
   calcularTarifa(ticket) {
-    return TARIFAS.DIARIA * ticket.qtdDiasUso;
+    if (ticket.qtdDiasUso === 1) return TARIFAS.FIXO_POR_INGRESSO;
+
+    return TARIFAS.FIXO_POR_INGRESSO * ticket.qtdDiasUso;
   }
 }
