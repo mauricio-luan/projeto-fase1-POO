@@ -12,6 +12,13 @@ export default class TicketEstacionamento {
   #qtdDiasUso;
   #valorCobrado;
 
+  /**
+   * Cria um ticket de estacionamento.
+   * @param {object} params
+   * @param {string} params.placa - Placa do veículo.
+   * @param {string} params.tipoCliente - Tipo do cliente associado ao ticket.
+   * @param {Date} [params.dataHoraEntrada=new Date()] - Momento da entrada no estacionamento.
+   */
   constructor({ placa, tipoCliente, dataHoraEntrada = new Date() }) {
     validate(arguments[0], {
       placa: "String",
@@ -67,10 +74,26 @@ export default class TicketEstacionamento {
     this.#calcularDiasUso();
   }
 
+  set qtdDiasUso(dias) {
+    validate(dias, "Number");
+    if (dias < 0)
+      throw new Error("Quantidade de dias de uso não pode ser negativa.");
+
+    this.#qtdDiasUso = dias;
+  }
+
+  /**
+   * Indica se o ticket ainda está em aberto.
+   * @returns {boolean}
+   */
   estaEmAberto() {
     return this.dataHoraEntrada && this.dataHoraSaida === null;
   }
 
+  /**
+   * Representação textual do ticket.
+   * @returns {string}
+   */
   toString() {
     return (
       `TicketEstacionamento { ` +

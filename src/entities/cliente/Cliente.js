@@ -10,6 +10,14 @@ export default class Cliente {
   #tipo;
   #veiculos;
 
+  /**
+   * Cria um cliente base.
+   * @param {object} params
+   * @param {string} params.nome - Nome completo do cliente.
+   * @param {string} params.documento - CPF ou CNPJ do cliente.
+   * @param {string} params.tipo - Categoria do cliente no sistema.
+   * @param {string[]} params.veiculos - Lista de placas vinculadas ao cliente.
+   */
   constructor({ nome, documento, tipo, veiculos }) {
     validate(arguments[0], {
       nome: "String",
@@ -45,6 +53,10 @@ export default class Cliente {
     return Array.from(this.#veiculos);
   }
 
+  /**
+   * Representação textual do cliente.
+   * @returns {string}
+   */
   toString() {
     return `Cliente { nome: '${this.#nome}', documento: '${this.#documento}', tipo: '${this.#tipo}', veiculos: ${JSON.stringify(this.veiculos)} }`;
   }
@@ -59,6 +71,11 @@ export default class Cliente {
     return formattedDoc.length === 11 || formattedDoc.length === 14;
   }
 
+  /**
+   * Associa um novo veículo ao cliente.
+   * @param {string} placa - Placa do veículo.
+   * @returns {boolean}
+   */
   cadastrarVeiculo(placa) {
     validate(placa, "String");
     if (this.#veiculos.has(placa)) {
@@ -68,6 +85,11 @@ export default class Cliente {
     return true;
   }
 
+  /**
+   * Remove um veículo já cadastrado do cliente.
+   * @param {string} placa - Placa do veículo.
+   * @returns {boolean}
+   */
   removerVeiculo(placa) {
     validate(placa, "String");
     if (!this.#veiculos.has(placa)) {
@@ -79,7 +101,7 @@ export default class Cliente {
 
   /**
    * Calcula a tarifa do estacionamento com base no ticket fornecido.
-   * @param {object} ticket - O ticket de estacionamento.
+   * @param {import("../estacionamento/TicketEstacionamento.js").default} ticket - O ticket de estacionamento.
    * @returns {number} - A tarifa calculada.
    */
   calcularTarifa(ticket) {}

@@ -8,6 +8,9 @@ import Cliente from "./Cliente.js";
 export default class CadastroCliente {
   #clientes;
 
+  /**
+   * Cria o repositório em memória de clientes.
+   */
   constructor() {
     this.#clientes = new Map();
   }
@@ -15,7 +18,7 @@ export default class CadastroCliente {
   /**
    * Obtém um cliente com base na placa do veículo.
    * @param {string} placa - A placa do veículo.
-   * @returns {Object|null} - O cliente associado à placa, se existir.
+   * @returns {Cliente|null} - O cliente associado à placa, se existir.
    */
   obterClientePorPlaca(placa) {
     validate(placa, "String");
@@ -27,14 +30,26 @@ export default class CadastroCliente {
     return null;
   }
 
+  /**
+   * Lista de clientes cadastrados.
+   * @returns {Cliente[]}
+   */
   get clientes() {
     return Array.from(this.#clientes.values());
   }
 
+  /**
+   * Quantidade total de clientes cadastrados.
+   * @returns {number}
+   */
   get qtdClientes() {
     return this.#clientes.size;
   }
 
+  /**
+   * Serializa os clientes para um formato simples, apropriado para persistência.
+   * @returns {object[]}
+   */
   clientesToJSON() {
     return Array.from(this.#clientes.values()).map((cliente) => ({
       nome: cliente.nome,
@@ -49,12 +64,22 @@ export default class CadastroCliente {
     }));
   }
 
+  /**
+   * Cadastra um cliente usando o documento como chave única.
+   * @param {Cliente} cliente - Instância do cliente a ser armazenada.
+   * @returns {boolean}
+   */
   cadastrarCliente(cliente) {
     validate(cliente, Cliente);
     this.#clientes.set(cliente.documento, cliente);
     return true;
   }
 
+  /**
+   * Exclui um cliente pelo documento.
+   * @param {string} documentoCliente - CPF ou CNPJ do cliente.
+   * @returns {boolean}
+   */
   excluirCliente(documentoCliente) {
     validate(documentoCliente, "String");
     if (!this.#clientes.has(documentoCliente))
@@ -64,10 +89,19 @@ export default class CadastroCliente {
     return true;
   }
 
+  /**
+   * Recupera um cliente pelo documento.
+   * @param {string} documentoCliente - CPF ou CNPJ do cliente.
+   * @returns {Cliente|undefined}
+   */
   getCliente(documentoCliente) {
     return this.#clientes.get(documentoCliente);
   }
 
+  /**
+   * Indica se não há clientes cadastrados.
+   * @returns {boolean}
+   */
   isEmpty() {
     return this.#clientes.size === 0;
   }

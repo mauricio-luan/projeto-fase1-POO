@@ -3,6 +3,9 @@ import path from "path";
 import { TIPOS } from "../../constants.js";
 import { validate } from "bycontract";
 
+/**
+ * Responsável por carregar e persistir clientes e tickets em arquivos CSV.
+ */
 export default class CSV {
   #clientes;
   #historicoTickets;
@@ -11,6 +14,11 @@ export default class CSV {
   #csv;
   #csvHistoricoTickets;
 
+  /**
+   * Cria o serviço de persistência CSV.
+   * @param {import("../cliente/CadastroCliente.js").default} cadastroCliente - Repositório de clientes.
+   * @param {import("../estacionamento/RegistroDeEntradasESaidas.js").default} estacionamento - Serviço com o histórico de tickets.
+   */
   constructor(cadastroCliente, estacionamento) {
     this.#clientes = cadastroCliente;
     this.#historicoTickets = estacionamento;
@@ -20,6 +28,10 @@ export default class CSV {
     this.#csvHistoricoTickets = "";
   }
 
+  /**
+   * Lê o arquivo CSV de clientes e devolve suas linhas úteis.
+   * @returns {Promise<string[]|undefined>}
+   */
   async getCSVClientes() {
     try {
       const csv = await fs.readFile(this.#caminhoCSV, "utf-8");
@@ -31,6 +43,10 @@ export default class CSV {
     }
   }
 
+  /**
+   * Lê o arquivo CSV do histórico de tickets e devolve suas linhas úteis.
+   * @returns {Promise<string[]|undefined>}
+   */
   async getCSVHistoricoTickets() {
     try {
       const csv = await fs.readFile(this.#caminhoCSVHistoricoTickets, "utf-8");
@@ -45,6 +61,10 @@ export default class CSV {
     }
   }
 
+  /**
+   * Preenche o buffer de saída do CSV de clientes.
+   * @returns {void}
+   */
   #populaCSVClientes() {
     const clientes = this.#clientes.clientesToJSON();
     let linha = null;
@@ -64,6 +84,10 @@ export default class CSV {
     }
   }
 
+  /**
+   * Preenche o buffer de saída do CSV de histórico de tickets.
+   * @returns {void}
+   */
   #populaCSVHistoricoTickets() {
     const tickets = this.#historicoTickets.historicoTicketsToJSON;
     let linha = "";
@@ -83,10 +107,18 @@ export default class CSV {
     }
   }
 
+  /**
+   * Indica se o buffer de clientes já recebeu conteúdo.
+   * @returns {boolean}
+   */
   #CSVEstaPreenchido() {
     return this.#csv !== "";
   }
 
+  /**
+   * Gera os arquivos CSV de clientes e histórico de tickets.
+   * @returns {Promise<boolean>}
+   */
   async geraCSV() {
     if (this.#CSVEstaPreenchido()) this.#csv += "\n";
 

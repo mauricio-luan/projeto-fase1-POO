@@ -14,6 +14,10 @@ export default class RegistroDeEntradasESaidas {
   #listaNegra;
   #historicoTickets;
 
+  /**
+   * Cria o serviço principal de movimentação do estacionamento.
+   * @param {CadastroCliente} cadastroCliente - Repositório de clientes cadastrados.
+   */
   constructor(cadastroCliente) {
     this.#clientes = cadastroCliente;
     this.#patio = new Map();
@@ -24,7 +28,7 @@ export default class RegistroDeEntradasESaidas {
   /**
    * Valida a entrada de um veículo no estacionamento.
    * @param {string} placa - A placa do veículo.
-   * @returns {object|null} - O cliente associado à placa, se existir.
+   * @returns {import("../cliente/Cliente.js").default|null} - O cliente associado à placa, se existir.
    * @throws {Error} - Se a entrada for inválida.
    */
   #validaEntrada(placa) {
@@ -63,7 +67,7 @@ export default class RegistroDeEntradasESaidas {
   /**
    * Registra a entrada de um veículo no estacionamento e adiciona ao registro de entradas e saídas.
    * @param {string} placa - A placa do veículo.
-   * @returns {object} - O ticket de estacionamento gerado.
+   * @returns {TicketEstacionamento} - O ticket de estacionamento gerado.
    */
   registraEntrada(placa) {
     validate(placa, "String");
@@ -84,7 +88,7 @@ export default class RegistroDeEntradasESaidas {
    * Registra a saída de um veículo do estacionamento.
    * @param {string} placa - A placa do veículo.
    * @param {boolean} pgtoAprovado - Indica se o pagamento foi aprovado.
-   * @returns {object} - O ticket de estacionamento atualizado.
+   * @returns {TicketEstacionamento} - O ticket de estacionamento atualizado.
    */
   registraSaida(placa, pgtoAprovado) {
     validate(placa, "String");
@@ -136,6 +140,10 @@ export default class RegistroDeEntradasESaidas {
     return new Set(this.#listaNegra);
   }
 
+  set historicoTickets(ticket) {
+    this.#historicoTickets.push(ticket);
+  }
+
   get historicoTicketsToJSON() {
     return this.#historicoTickets.map((ticket) => ({
       placa: ticket.placa,
@@ -145,5 +153,14 @@ export default class RegistroDeEntradasESaidas {
       ...(ticket.qtdDiasUso ? { qtdDiasUso: ticket.qtdDiasUso } : {}),
       ...(ticket.valorCobrado ? { valorCobrado: ticket.valorCobrado } : {}),
     }));
+  }
+
+  /**
+   * Reinsere no pátio um ticket previamente restaurado e ainda em aberto.
+   * @param {TicketEstacionamento} ticket - Ticket em aberto que deve voltar ao pátio.
+   * @returns {void}
+   */
+  reinsereTicketEmAberto(ticket) {
+    this.#patio.set(ticket.placa, ticket);
   }
 }

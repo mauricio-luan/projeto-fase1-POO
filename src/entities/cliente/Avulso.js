@@ -8,11 +8,21 @@ import { TARIFAS } from "../../constants.js";
 export default class Avulso {
   #veiculos;
 
+  /**
+   * Cria um cliente avulso.
+   * @param {object} params
+   * @param {string[]} params.veiculos - Veículos usados no acesso avulso.
+   */
   constructor({ veiculos }) {
     validate(veiculos, "Array.<String>");
     this.#veiculos = [...veiculos];
   }
 
+  /**
+   * Calcula a tarifa de um ticket avulso com base no tempo de permanência.
+   * @param {import("../estacionamento/TicketEstacionamento.js").default} ticket
+   * @returns {number}
+   */
   calcularTarifa(ticket) {
     if (ticket.qtdDiasUso > 1) {
       return ticket.qtdDiasUso * TARIFAS.DIARIA;
