@@ -75,9 +75,7 @@ node app.js
 ## Tecnologias
 
 - JavaScript
-- Node.js
-- ESLint
-- Prettier
+- Node.js (24.14)
 - bycontract
 
 ## Observação
